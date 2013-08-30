@@ -82,8 +82,9 @@ public class ReadTemplate {
 			lables.put(s, t);
 		}
 		
-		nl = root.getElementsByTagName("row");
 		coordList = new ArrayList<List<Coord>>();
+		
+		nl = root.getElementsByTagName("row");	
 		for(int i = 0; i < nl.getLength(); i++)
 		{
 			List<Coord> lt = new ArrayList<Coord>();
@@ -113,7 +114,45 @@ public class ReadTemplate {
 			
 			coordList.add(lt);
 		}
+		
+		nl = root.getElementsByTagName("rows");	
+		for(int i = 0; i < nl.getLength(); i++)
+		{
+			Element el = (Element) nl.item(i);
+			
+			Label labelFrom = lables.get(el.getAttribute("fromLabel"));
+			
+			String rowFromS = el.getAttribute("fromShift");
+			int rowFrom = labelFrom.row;
+			if(!rowFromS.equals(""))
+				rowFrom += Integer.parseInt(rowFromS);
+						
+			int columnFrom = labelFrom.column;
+			
+			Label labelTo = lables.get(el.getAttribute("toLabel"));
+			
+			String rowToS = el.getAttribute("toShift");
+			int rowTo = labelTo.row;
+			if(!rowToS.equals(""))
+				rowTo += Integer.parseInt(rowToS);
+			
+			String[] columns = el.getAttribute("columns").split(",");
+			
+			for(int j = rowFrom; j < rowTo; j++)
+			{
+				List<Coord> lt = new ArrayList<Coord>();
+				
+				for(int k = 0; k < columns.length; k++)
+					lt.add(new Coord(j, columnFrom + Integer.parseInt(columns[k])));
+					
+				coordList.add(lt);
+				
+			}
+			
+			
+		}
 	}
+		
 	
 	public Iterator<List<Coord>> getIterator()
 	{

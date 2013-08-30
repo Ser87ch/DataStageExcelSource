@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
-    <label name="1" text="REPORT NO :"/>
+	<label name="l1" text="REPORT NO :" />
+	<label name="l2" text="Completion" />
+	<label name="l3" text="Last BOP Pressure Test:" />
+	<label name="l4" text="4. OPERATION SUMMARY (00:00 - 24:00)" />
+	<label name="l5" text="5. CURRENT DAY OPERATION SUMMARY (00:00 - 06:00)" />
+	<label name="l6" text="8. BHA DATA" />
+	<label name="l7" text="9. DRILLING PARAMETERS" />
 	<row>
-		<cell label="1" column="3"/>
-		<cell label="1" row="1" column="3"/>
+		<cell label="l1" column="3" />
+		<cell label="l1" row="1" column="3" />
+		<cell label="l1" column="21" />
+		<cell label="l1" row="1" column="21" />
+		<cell label="l2" column="4" />
+		<cell label="l3" column="8" />
 	</row>
-	
+	<rows fromLabel="l4" fromShift="2" toLabel="l5" columns="0,2,4,6,8"/>
+	<rows fromLabel="l6" fromShift="13" toLabel="l7" toShift="-1" columns="0,8,10,12,16,20,24"/>
 </template>
