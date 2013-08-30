@@ -29,9 +29,9 @@ public class ReadExcel extends Stage {
 		info("*****Initializing Excel Application*****"); 
 
 		//Code block to initalize and read user property values provided in the Stage GUI.
-		byte[] userProperties 		= getUserProperties().getBytes();
-		InputStream propertyStream 	= new ByteArrayInputStream(userProperties);
-		Properties properties 		= new Properties();
+		byte[] userProperties = getUserProperties().getBytes();
+		InputStream propertyStream = new ByteArrayInputStream(userProperties);
+		Properties properties = new Properties();
 
 		try
 		{
@@ -45,20 +45,20 @@ public class ReadExcel extends Stage {
 		} 	
 
 		//Read the value of the user property named ExcelFileName
-		String propertyValue 	= properties.getProperty("ExcelFileName" ); 		
+		String propertyValue = properties.getProperty("ExcelFileName" ); 		
 
 		//Code block to create the objects of 
 		//the File input stream,workbook and sheet.
 		try 
 		{
-			FileInputStream fis		=new FileInputStream(propertyValue);
-			HSSFWorkbook workbook			=new HSSFWorkbook(fis);
-			formulaEval			=new HSSFFormulaEvaluator(workbook);
+			FileInputStream fis = new FileInputStream(propertyValue);
+			HSSFWorkbook workbook = new HSSFWorkbook(fis);
+			formulaEval	= new HSSFFormulaEvaluator(workbook);
 
 			//Get the first sheet object
 			HSSFSheet sheet = workbook.getSheetAt(0);
 
-			rows				=sheet.rowIterator(); 
+			rows = sheet.rowIterator(); 
 		}	 
 		catch (FileNotFoundException e) 
 		{
@@ -91,21 +91,21 @@ public class ReadExcel extends Stage {
 		//If rows exist
 		if(rows.hasNext())								
 		{
-			int colCount		= 0;
+			int colCount = 0;
 
 			//Create an output row object to hold the row data
-			com.ascentialsoftware.jds.Row outputRow 		= createOutputRow(); 		
+			com.ascentialsoftware.jds.Row outputRow	= createOutputRow(); 		
 
 			//Create an Excel row object
-			HSSFRow hrow 		= (HSSFRow) rows.next();	
+			HSSFRow hrow = (HSSFRow) rows.next();	
 
 			//Create a cell iterator for the row
-			Iterator<Cell> cells 	= hrow.cellIterator();	
+			Iterator<Cell> cells = hrow.cellIterator();	
 
 			//If cells exist
 			while (cells.hasNext())						
 			{
-				HSSFCell hcell 	= (HSSFCell) cells.next();
+				HSSFCell hcell = (HSSFCell) cells.next();
 
 				//Extract cell value
 				String cellData = extractCellValue(hcell,hcell.getCellType());	
