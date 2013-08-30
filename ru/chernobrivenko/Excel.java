@@ -187,7 +187,7 @@ public class Excel {
 				if(new SimpleDateFormat("yyyy").format(dt).equals("1899"))
 					cell_value = new SimpleDateFormat("HH:mm").format(dt);
 				else
-					cell_value = new SimpleDateFormat("dd/MM/yyyy").format(dt); 
+					cell_value = new SimpleDateFormat("yyyy-MM-dd").format(dt); 
 			}
 			else
 				cell_value = Double.toString(cell.getNumericCellValue()); 

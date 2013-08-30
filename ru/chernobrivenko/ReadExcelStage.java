@@ -10,7 +10,7 @@ import com.ascentialsoftware.jds.Stage;
 
 
 public class ReadExcelStage extends Stage {
-	
+
 	private Excel ex;
 
 	public void initialize() 
@@ -35,12 +35,15 @@ public class ReadExcelStage extends Stage {
 		} 	
 
 		//Read the value of the user property named ExcelFileName
-		String propertyValue = properties.getProperty("ExcelFileName" ); 		
-
+		String src = properties.getProperty("ExcelFileName" ); 		
+		String template = properties.getProperty("TemplateFileName" );
 		ex = new Excel();
 		try
 		{
-			ex.loadExcel(propertyValue);			
+			if(template.equals(""))
+				ex.loadExcel(src);		
+			else
+				ex.loadExcel(src, template);
 		}
 		catch (FileNotFoundException e) 
 		{
