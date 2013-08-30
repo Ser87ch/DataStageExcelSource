@@ -16,16 +16,18 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import ru.chernobrivenko.ReadTemplate.Coord;
 
 
 
 public class Excel {
 
-	private Iterator<Row> rows;
+	private Iterator<Row> rowsDS;
+	private Iterator<List<Coord>> listCoord;
 	private Sheet sheet;
-
+	private boolean isTemplate;
 
 	public Excel()
 	{
@@ -42,25 +44,47 @@ public class Excel {
 		//Get the first sheet object
 		sheet = workbook.getSheetAt(0);
 
-		rows = sheet.rowIterator();	
+		rowsDS = sheet.rowIterator();
+		isTemplate = false;
+	}
+	
+	public void loadExcel(String src, String template) throws FileNotFoundException, IOException
+	{
+		FileInputStream fis = new FileInputStream(src);
+		Workbook workbook = new XSSFWorkbook(fis);
 
 
+		//Get the first sheet object
+		sheet = workbook.getSheetAt(0);
+				
+		ReadTemplate rt = new ReadTemplate(this);
+		rt.loadTemplate(template);
+		listCoord = rt.getIterator();
+		isTemplate = true;
 
 	}
 
-	public Iterator<Row> getRows()
+	public Iterator<Row> getRowIterator()
 	{
-		return rows;
+		return sheet.rowIterator();
 	}
 
-	private List<String> getStringArrayFromRow()
+	private List<String> getStringArray()
 	{
-		if(rows.hasNext())
+		if(isTemplate)
+			return getStringArrayFromTemplate();
+		else
+			return getStringArrayFromRowAll();
+	}
+	
+	private List<String> getStringArrayFromRowAll()
+	{
+		if(rowsDS.hasNext())
 		{
 			List<String> ls = new ArrayList<String>();
 
 			//Create an Excel row object
-			Row hrow = rows.next();	
+			Row hrow = rowsDS.next();	
 
 			//Create a cell iterator for the row
 			Iterator<Cell> cells = hrow.cellIterator();	
@@ -81,10 +105,34 @@ public class Excel {
 		else
 			return null;
 	}
+	
+	private List<String> getStringArrayFromTemplate()
+	{
+		if(listCoord.hasNext())
+		{
+			List<String> ls = new ArrayList<String>();
+
+			//Create an Excel row object
+			List<Coord> lt = listCoord.next();
+			
+			for(Coord cd:lt)
+			{
+				Row r = sheet.getRow(cd.row);
+				Cell c = r.getCell(cd.column);
+				
+				ls.add(extractCellValue(c));
+			}
+			
+			return ls;
+		}
+		else
+			return null;
+	}
+	
 
 	public boolean writeOutputRow(com.ascentialsoftware.jds.Row outputRow)
 	{
-		List<String> ls = getStringArrayFromRow();
+		List<String> ls = getStringArray();
 
 		if(ls != null)
 		{
@@ -155,18 +203,12 @@ public class Excel {
 
 	public void print()
 	{
-//		CellReference cellReference = new CellReference("A26"); 
-//		Row row = sheet.getRow(cellReference.getRow());
-//		Cell cell = row.getCell(cellReference.getCol()); 
-		
-//		out.println(cell.getRichStringCellValue().toString());
-
-		List<String> ls = getStringArrayFromRow();
+		List<String> ls = getStringArray();
 		while(ls != null)
 		{
 			out.println(ls.toString());
 
-			ls = getStringArrayFromRow();
+			ls = getStringArray();
 		}
 	}
 

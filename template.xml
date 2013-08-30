@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <label name="1" text="REPORT NO :"/>
+	<row>
+		<cell label="1" column="3"/>
+		<cell label="1" row="1" column="3"/>
+	</row>
+	
+</template>
